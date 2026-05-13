@@ -1,4 +1,8 @@
 package com.spacewar.logic;
 
-public class GameState {
+public enum GameState {
+    MENU,
+    JUGANDO,
+    PAUSA,
+    GAME_OVER
 }
