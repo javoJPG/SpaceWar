@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Nave {
+    private static final int COOLDOWN_DISPARO = 15;
+
     private int x;
     private int y;
     private int velocidad;
     private int ancho;
     private int alto;
     private List<Proyectil> proyectiles;
+    private int disparoCooldown;
 
     public Nave(int x, int y) {
         this.x = x;
@@ -37,10 +40,17 @@ public class Nave {
     }
 
     public void disparar() {
+        if (disparoCooldown > 0) {
+            return;
+        }
         proyectiles.add(new Proyectil(x + ancho / 2, y));
+        disparoCooldown = COOLDOWN_DISPARO;
     }
 
     public void actualizar() {
+        if (disparoCooldown > 0) {
+            disparoCooldown--;
+        }
         proyectiles.removeIf(p -> !p.isActivo());
         for (Proyectil p : proyectiles) {
             p.actualizar();
