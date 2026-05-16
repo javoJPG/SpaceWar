@@ -1,11 +1,11 @@
 package com.spacewar.entities.enemies;
 
-public class EnemigoBasico extends Enemigo {
+public class EnemigoEspecial extends Enemigo {
 
     private final int anchoPantalla;
 
-    public EnemigoBasico(int x, int y, int anchoPantalla, int limiteDescensoY) {
-        super(x, y, 3, limiteDescensoY, 90);
+    public EnemigoEspecial(int x, int y, int anchoPantalla, int limiteDescensoY) {
+        super(x, y, 10, limiteDescensoY, 110);
         this.anchoPantalla = anchoPantalla;
         this.velocidad = 2;
         this.direccionHorizontal = Math.random() < 0.5 ? -1 : 1;

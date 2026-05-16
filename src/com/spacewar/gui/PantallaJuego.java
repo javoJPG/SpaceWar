@@ -1,9 +1,12 @@
 package com.spacewar.gui;
 
 import com.spacewar.entities.Nave;
+import com.spacewar.entities.PowerUp;
 import com.spacewar.entities.Proyectil;
 import com.spacewar.entities.ProyectilEnemigo;
 import com.spacewar.entities.enemies.Enemigo;
+import com.spacewar.entities.enemies.EnemigoEspecial;
+import com.spacewar.entities.enemies.Boss;
 import com.spacewar.logic.Vida;
 import com.spacewar.logic.Puntaje;
 import com.spacewar.logic.Nivel;
@@ -29,6 +32,7 @@ public class PantallaJuego {
         dibujarNave(g);
         dibujarProyectiles(g);
         dibujarEnemigos(g);
+        dibujarPowerUps(g);
         dibujarHUD(g);
     }
 
@@ -46,13 +50,33 @@ public class PantallaJuego {
 
     private void dibujarEnemigos(Graphics g) {
         for (Enemigo e : nivel.getEnemigos()) {
-            g.setColor(Color.RED);
-            g.fillRect(e.getX(), e.getY(), 40, 40);
+            if (e instanceof Boss) {
+                g.setColor(new Color(180, 0, 60));
+            } else if (e instanceof EnemigoEspecial) {
+                g.setColor(new Color(200, 50, 255));
+            } else {
+                g.setColor(Color.RED);
+            }
+            g.fillRect(e.getX(), e.getY(), e.getAncho(), e.getAlto());
 
             g.setColor(Color.ORANGE);
             for (ProyectilEnemigo p : e.getProyectiles()) {
                 g.fillRect(p.getX(), p.getY(), 5, 10);
             }
+        }
+    }
+
+    private void dibujarPowerUps(Graphics g) {
+        for (PowerUp p : nivel.getPowerUps()) {
+            if (!p.isActivo()) {
+                continue;
+            }
+            switch (p.getTipo()) {
+                case VIDA -> g.setColor(Color.GREEN);
+                case DISPARO_RAPIDO -> g.setColor(Color.YELLOW);
+                case ESCUDO -> g.setColor(Color.CYAN);
+            }
+            g.fillOval(p.getX(), p.getY(), PowerUp.TAMANO, PowerUp.TAMANO);
         }
     }
 

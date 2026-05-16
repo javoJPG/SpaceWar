@@ -1,6 +1,8 @@
 package com.spacewar.entities;
 
 public class PowerUp {
+    public static final int TAMANO = 28;
+
     public enum Tipo { VIDA, DISPARO_RAPIDO, ESCUDO }
 
     private int x;
@@ -17,9 +19,11 @@ public class PowerUp {
         this.tipo = tipo;
     }
 
-    public void actualizar() {
+    public void actualizar(int altoPantalla) {
         y += velocidad;
-        if (y > 800) activo = false;
+        if (y > altoPantalla) {
+            activo = false;
+        }
     }
 
     public boolean isActivo() { return activo; }

@@ -27,7 +27,7 @@ public class Boss extends Enemigo {
 
     private void moverHorizontal() {
         x += (velocidad + fase) * direccion;
-        if (x <= 0 || x >= anchoPantalla - 60) {
+        if (x <= 0 || x >= anchoPantalla - getAncho()) {
             direccion *= -1;
         }
     }
@@ -51,4 +51,10 @@ public class Boss extends Enemigo {
     }
 
     public int getFase() { return fase; }
+
+    @Override
+    public int getAncho() { return 70; }
+
+    @Override
+    public int getAlto() { return 80; }
 }

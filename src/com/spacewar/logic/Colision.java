@@ -1,9 +1,12 @@
 package com.spacewar.logic;
 
 import com.spacewar.entities.Nave;
+import com.spacewar.entities.PowerUp;
 import com.spacewar.entities.Proyectil;
 import com.spacewar.entities.ProyectilEnemigo;
 import com.spacewar.entities.enemies.Enemigo;
+import com.spacewar.entities.enemies.EnemigoEspecial;
+
 import java.awt.Rectangle;
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class Colision {
         verificarProyectilesNave();
         verificarProyectilesEnemigos();
         verificarContactoDirecto();
+        verificarPowerUps();
     }
 
     private void verificarProyectilesNave() {
@@ -31,13 +35,16 @@ public class Colision {
             for (Enemigo e : nivel.getEnemigos()) {
                 if (p.isActivo() && e.isActivo() && colisiona(
                         p.getX(), p.getY(), 5, 10,
-                        e.getX(), e.getY(), 40, 40)) {
+                        e.getX(), e.getY(), e.getAncho(), e.getAlto())) {
                     p.setActivo(false);
                     e.recibirDanio(1);
                     if (!e.isActivo()) {
                         puntaje.sumar(100);
                         nivel.enemigoEliminado();
                         puntaje.aumentarMultiplicador();
+                        if (e instanceof EnemigoEspecial) {
+                            nivel.dejarCaerPowerUp(e);
+                        }
                     }
                 }
             }
@@ -51,7 +58,7 @@ public class Colision {
                         p.getX(), p.getY(), 5, 10,
                         nave.getX(), nave.getY(), nave.getAncho(), nave.getAlto())) {
                     p.setActivo(false);
-                    vida.recibirDanio(p.getDanio());
+                    aplicarDanioAlJugador(p.getDanio());
                     puntaje.resetearMultiplicador();
                 }
             }
@@ -61,13 +68,43 @@ public class Colision {
     private void verificarContactoDirecto() {
         for (Enemigo e : nivel.getEnemigos()) {
             if (e.isActivo() && colisiona(
-                    e.getX(), e.getY(), 40, 40,
+                    e.getX(), e.getY(), e.getAncho(), e.getAlto(),
                     nave.getX(), nave.getY(), nave.getAncho(), nave.getAlto())) {
+                boolean eraEspecial = e instanceof EnemigoEspecial;
                 e.recibirDanio(e.getVida());
-                vida.recibirDanio(1);
+                aplicarDanioAlJugador(1);
                 puntaje.resetearMultiplicador();
+                if (!e.isActivo() && eraEspecial) {
+                    nivel.dejarCaerPowerUp(e);
+                }
             }
         }
+    }
+
+    private void verificarPowerUps() {
+        List<PowerUp> lista = nivel.getPowerUps();
+        for (PowerUp p : lista) {
+            if (!p.isActivo() || !vida.estaVivo()) {
+                continue;
+            }
+            if (colisiona(
+                    p.getX(), p.getY(), PowerUp.TAMANO, PowerUp.TAMANO,
+                    nave.getX(), nave.getY(), nave.getAncho(), nave.getAlto())) {
+                p.setActivo(false);
+                switch (p.getTipo()) {
+                    case VIDA -> vida.curar(1);
+                    case DISPARO_RAPIDO -> nave.activarDisparoRapido();
+                    case ESCUDO -> nave.agregarEscudo(1);
+                }
+            }
+        }
+    }
+
+    private void aplicarDanioAlJugador(int danio) {
+        if (nave.intentarAbsorberConEscudo()) {
+            return;
+        }
+        vida.recibirDanio(danio);
     }
 
     private boolean colisiona(int x1, int y1, int w1, int h1,

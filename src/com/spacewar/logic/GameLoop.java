@@ -40,7 +40,7 @@ public class GameLoop extends JPanel implements Runnable {
         nave          = new Nave(ANCHO / 2, ALTO - 100);
         vida          = new Vida(3);
         puntaje       = new Puntaje();
-        nivel         = new Nivel(ANCHO);
+        nivel         = new Nivel(ANCHO, ALTO);
         colision      = new Colision(nave, vida, puntaje, nivel);
         controlNave   = new ControlNave(nave, ANCHO, ALTO);
 
