@@ -4,6 +4,7 @@ import com.spacewar.entities.Nave;
 import com.spacewar.gui.PantallaJuego;
 import com.spacewar.gui.PantallaMenu;
 import com.spacewar.gui.PantallaGameOver;
+import com.spacewar.util.GestorSonido;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
@@ -85,6 +86,7 @@ public class GameLoop extends JPanel implements Runnable {
                 if (pantallaMenu.isIniciar()) {
                     pantallaMenu.resetear();
                     estado = GameState.JUGANDO;
+                    GestorSonido.getInstancia().iniciarMusicaFondo();
                 }
             }
             case JUGANDO -> {
@@ -93,6 +95,8 @@ public class GameLoop extends JPanel implements Runnable {
                 nivel.actualizar();
                 colision.verificar();
                 if (!vida.estaVivo()) {
+                    GestorSonido.getInstancia().detenerMusicaFondo();
+                    GestorSonido.getInstancia().reproducirExplosionDerrota();
                     estado = GameState.GAME_OVER;
                 }
             }
@@ -102,6 +106,7 @@ public class GameLoop extends JPanel implements Runnable {
                     pantallaGameOver.resetear();
                     inicializar();
                     estado = GameState.JUGANDO;
+                    GestorSonido.getInstancia().iniciarMusicaFondo();
                 }
             }
         }

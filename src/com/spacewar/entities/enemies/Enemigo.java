@@ -17,8 +17,8 @@ public abstract class Enemigo {
     protected List<ProyectilEnemigo> proyectiles;
     protected int cooldownDisparo;
     protected int timerDisparo;
-    /** Dirección horizontal (-1 / +1) para enemigos de formación; 0 = no usa este rebote. */
     protected int direccionHorizontal;
+    protected final int varianteSprite;
 
     public Enemigo(int x, int y, int vida, int posicionLimite, int cooldownDisparo) {
         this.x = x;
@@ -30,6 +30,7 @@ public abstract class Enemigo {
         this.cooldownDisparo = cooldownDisparo;
         this.timerDisparo = 0;
         this.direccionHorizontal = 0;
+        this.varianteSprite = (int) (Math.random() * 3);
     }
 
     public abstract void actualizar();
@@ -49,7 +50,7 @@ public abstract class Enemigo {
     }
 
     protected void disparar() {
-        proyectiles.add(new ProyectilEnemigo(x, y));
+        proyectiles.add(new ProyectilEnemigo(x, y, varianteSprite));
     }
 
     public void recibirDanio(int danio) {
@@ -65,16 +66,16 @@ public abstract class Enemigo {
     public int getAncho() { return TAMANO_HITBOX; }
     public int getAlto() { return TAMANO_HITBOX; }
     public int getVida() { return vida; }
+    public int getVarianteSprite() { return varianteSprite; }
     public List<ProyectilEnemigo> getProyectiles() { return proyectiles; }
 
-    /** Enemigos de oleada rebotan entre sí al solaparse. */
     public boolean puedeRebotarConEnemigos() {
         return false;
     }
 
     /**
-     * Tras un choque con otro enemigo, toma dirección horizontal alejándose de él
-     * (evita que dos que iban en la misma dirección sigan pegados).
+     * Tras un choque con otro enemigo, toma dirección horizontal alejandose de el
+     * (evita que dos que iban en la misma direccion sigan pegados).
      */
     public void empujarHorizontalLejosDe(Enemigo otro) {
         if (!puedeRebotarConEnemigos()) {

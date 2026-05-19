@@ -6,6 +6,7 @@ import com.spacewar.entities.Proyectil;
 import com.spacewar.entities.ProyectilEnemigo;
 import com.spacewar.entities.enemies.Enemigo;
 import com.spacewar.entities.enemies.EnemigoEspecial;
+import com.spacewar.util.GestorSonido;
 
 import java.awt.Rectangle;
 import java.util.List;
@@ -34,7 +35,7 @@ public class Colision {
         for (Proyectil p : nave.getProyectiles()) {
             for (Enemigo e : nivel.getEnemigos()) {
                 if (p.isActivo() && e.isActivo() && colisiona(
-                        p.getX(), p.getY(), 5, 10,
+                        p.getX() - p.getAncho() / 2, p.getY(), p.getAncho(), p.getAlto(),
                         e.getX(), e.getY(), e.getAncho(), e.getAlto())) {
                     p.setActivo(false);
                     e.recibirDanio(1);
@@ -55,7 +56,7 @@ public class Colision {
         for (Enemigo e : nivel.getEnemigos()) {
             for (ProyectilEnemigo p : e.getProyectiles()) {
                 if (p.isActivo() && vida.estaVivo() && colisiona(
-                        p.getX(), p.getY(), 5, 10,
+                        p.getX() - p.getAncho() / 2, p.getY(), p.getAncho(), p.getAlto(),
                         nave.getX(), nave.getY(), nave.getAncho(), nave.getAlto())) {
                     p.setActivo(false);
                     aplicarDanioAlJugador(p.getDanio());
@@ -91,6 +92,7 @@ public class Colision {
                     p.getX(), p.getY(), PowerUp.TAMANO, PowerUp.TAMANO,
                     nave.getX(), nave.getY(), nave.getAncho(), nave.getAlto())) {
                 p.setActivo(false);
+                GestorSonido.getInstancia().reproducirPowerUp();
                 switch (p.getTipo()) {
                     case VIDA -> vida.curar(1);
                     case DISPARO_RAPIDO -> nave.activarDisparoRapido();

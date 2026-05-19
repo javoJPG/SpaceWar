@@ -1,6 +1,9 @@
 package com.spacewar.entities;
 
 public class Proyectil {
+    public static final int ANCHO = 10;
+    public static final int ALTO = 16;
+
     private int x;
     private int y;
     protected int velocidad;
@@ -24,4 +27,6 @@ public class Proyectil {
     public int getY() { return y; }
     public void setY(int y) { this.y = y; }
     public int getVelocidad() { return velocidad; }
+    public int getAncho() { return ANCHO; }
+    public int getAlto() { return ALTO; }
 }

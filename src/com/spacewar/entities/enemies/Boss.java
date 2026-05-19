@@ -42,11 +42,11 @@ public class Boss extends Enemigo {
     @Override
     protected void disparar() {
         if (fase == 1) {
-            proyectiles.add(new ProyectilEnemigo(x + 30, y + 60));
+            proyectiles.add(new ProyectilEnemigo(x + 30, y + 60, true));
         } else {
-            proyectiles.add(new ProyectilEnemigo(x, y + 60));
-            proyectiles.add(new ProyectilEnemigo(x + 30, y + 60));
-            proyectiles.add(new ProyectilEnemigo(x + 60, y + 60));
+            proyectiles.add(new ProyectilEnemigo(x, y + 60, true));
+            proyectiles.add(new ProyectilEnemigo(x + 30, y + 60, true));
+            proyectiles.add(new ProyectilEnemigo(x + 60, y + 60, true));
         }
     }
 

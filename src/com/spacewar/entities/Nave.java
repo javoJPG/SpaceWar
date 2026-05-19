@@ -1,5 +1,7 @@
 package com.spacewar.entities;
 
+import com.spacewar.util.GestorSonido;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,7 @@ public class Nave {
         }
         proyectiles.add(new Proyectil(x + ancho / 2, y));
         disparoCooldown = disparoRapidoRestante > 0 ? COOLDOWN_DISPARO_RAPIDO : COOLDOWN_DISPARO;
+        GestorSonido.getInstancia().reproducirProyectil();
     }
 
     public void actualizar() {
